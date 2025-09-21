@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة تكوين الكلمات | REDSWORD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #e74c3c;
+            --primary-dark: #c0392b;
+            --secondary: #2c3e50;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #3498db;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-icon {
+            color: var(--primary);
+            font-size: 2.2rem;
+        }
+
+        .subtitle {
+            color: var(--secondary);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .radio-option {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .radio-option:hover {
+            border-color: var(--primary);
+        }
+
+        .radio-option.selected {
+            border-color: var(--primary);
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+
+        .radio-option i {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background-color: #1a252f;
+        }
+
+        .timer-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .timer {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            padding: 10px 25px;
+            background: var(--light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .timer.warning {
+            color: var(--warning);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .letters-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin: 25px 0;
+        }
+
+        .letter {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(145deg, #ff7b6e, #e74c3c);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            transition: var(--transition);
+        }
+
+        .letter:hover {
+            transform: translateY(-5px) rotate(3deg);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .words-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .word {
+            padding: 10px;
+            background-color: var(--light);
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .word:hover {
+            background-color: var(--info);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background-color: var(--success);
+            color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transform: translateX(100%);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .radio-group {
+                flex-direction: column;
+            }
+            
+            .letter {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-dragon logo-icon"></i>
+                <h1>𖤍|𝐑𝐄𝐃𝐒𝐖𝐎𝐑𝐃</h1>
+            </div>
+            <p class="subtitle">اختبر مهارتك في تكوين الكلمات من الحروف المتاحة</p>
+        </header>
+
+        <div id="setup" class="card">
+            <h2>إعداد الجولة</h2>
+            
+            <div class="form-group">
+                <label>طريقة اختيار الحروف:</label>
+                <div class="radio-group">
+                    <div class="radio-option selected" data-value="manual">
+                        <i class="fas fa-hand-pointer"></i>
+                        <p>اختيار يدوي</p>
+                    </div>
+                    <div class="radio-option" data-value="random">
+                        <i class="fas fa-random"></i>
+                        <p>اختيار عشوائي</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="letterCount">عدد الحروف:</label>
+                <input type="number" id="letterCount" min="3" max="12" value="6">
+            </div>
+            
+            <div class="form-group">
+                <label for="timeLimit">الوقت (ثواني):</label>
+                <input type="number" id="timeLimit" min="10" max="600" value="90">
+            </div>
+            
+            <div id="manualInput">
+                <div class="form-group">
+                    <label for="manualLetters">أدخل الحروف (مفصولة بمسافة):</label>
+                    <input type="text" id="manualLetters" placeholder="مثال: ك ب س ج ر ط">
+                </div>
+            </div>
+            
+            <button id="startGame" class="btn btn-block">بدء الجولة</button>
+        </div>
+
+        <div id="game" class="card hidden">
+            <h2>لعبة تكوين الكلمات</h2>
+            
+            <div class="game-info">
+                <div><strong>الحروف المتبقية:</strong> <span id="remainingTime">90</span> ثانية</div>
+                <div><strong>عدد الكلمات:</strong> <span id="wordsCount">0</span></div>
+            </div>
+            
+            <div class="timer-container">
+                <div class="timer" id="timer">90</div>
+            </div>
+            
+            <div class="letters-container" id="letters"></div>
+            
+            <div class="controls">
+                <button id="copyLetters" class="btn btn-secondary">
+                    <i class="fas fa-copy"></i> نسخ الحروف
+                </button>
+                <button id="newGame" class="btn">
+                    <i class="fas fa-redo"></i> جولة جديدة
+                </button>
+            </div>
+            
+            <h3>الكلمات الممكنة:</h3>
+            <div class="words-container" id="words"></div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">تم نسخ الحروف إلى الحافظة</div>
+
+    <audio id="alarm" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg"></audio>
+
+    <div class="footer">
+        <p>© 2023 ألعاب - 𖤍|𝐑𝐄𝐃𝐒𝐖𝐎𝐑𝐃. جميع الحقوق محفوظة.</p>
+    </div>
+
+    <script>
+        const alphabet = "أبتثجحخدذرزسشصضطظعغفقكلمنهوي".split("");
+        const dictionary = [
+            "كتب", "كتاب", "سبك", "بسك", "سطر", "سطح", "جرس", "بسط", 
+            "طرك", "ركب", "سبط", "كبس", "سبر", "برك", "طبر", "سطج",
+            "نبع", "عين", "بين", "بني", "ينب", "نبي", "بنية", "نية",
+            "صين", "ينص", "صنع", "عصى", "صاع", "عصا", "صنع", "نصي",
+            "كسب", "بكسب", "بسكن", "سكن", "نسك", "كنس", "سكب", "بكس",
+            "قبل", "يقبل", "قلب", "بقل", "قليب", "لبق", "بقلة", "قلب",
+            "فكر", "فكر", "كفر", "فرك", "رفق", "فارك", "كرف", "فرك",
+            "شمس", "مشى", "يشم", "شمعة", "عشم", "مشع", "شائم", "مشاع"
+        ];
+
+        let letters = [];
+        let timerInterval;
+        let currentMode = "manual";
+
+        // تهيئة واجهة المستخدم
+        document.querySelectorAll('.radio-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.radio-option').forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                currentMode = option.getAttribute('data-value');
+                
+                document.getElementById('manualInput').style.display = currentMode === "manual" ? 'block' : 'none';
+            });
+        });
+
+        // بدء اللعبة
+        document.getElementById('startGame').addEventListener('click', () => {
+            const count = parseInt(document.getElementById('letterCount').value);
+            const timeLimit = parseInt(document.getElementById('timeLimit').value);
+
+            if (currentMode === "manual") {
+                const inputLetters = document.getElementById('manualLetters').value.trim().split(/\s+/);
+                if (inputLetters.length !== count) {
+                    showNotification("عدد الحروف لا يطابق المدخل", "error");
+                    return;
+                }
+                
+                // التحقق من عدم وجود حروف مكررة
+                const uniqueLetters = [...new Set(inputLetters)];
+                if (uniqueLetters.length !== inputLetters.length) {
+                    showNotification("يوجد حروف مكررة. الرجاء إدخال حروف فريدة", "error");
+                    return;
+                }
+                
+                letters = inputLetters;
+            } else {
+                // اختيار حروف عشوائية بدون تكرار
+                letters = getRandomLetters(count);
+            }
+
+            startRound(timeLimit);
+        });
+
+        // زر النسخ
+        document.getElementById('copyLetters').addEventListener('click', () => {
+            const text = `ألعاب - 𖤍|𝐑𝐄𝐃𝐒𝐖𝐎𝐑𝐃
+لعبة تكوين الكلمات.
+----------------------
+الحروف:
+${letters.join(" ")}
+______________`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification("تم نسخ الحروف مع النص المطلوب");
+            });
+        });
+
+        // زر الجولة الجديدة
+        document.getElementById('newGame').addEventListener('click', () => {
+            resetGame();
+        });
+
+        // الحصول على حروف عشوائية بدون تكرار
+        function getRandomLetters(count) {
+            const shuffled = [...alphabet].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        // بدء الجولة
+        function startRound(timeLimit) {
+            document.getElementById('setup').classList.add('hidden');
+            document.getElementById('game').classList.remove('hidden');
+            
+            renderLetters();
+            renderWords();
+            startTimer(timeLimit);
+        }
+
+        // عرض الحروف
+        function renderLetters() {
+            const container = document.getElementById('letters');
+            container.innerHTML = "";
+            
+            letters.forEach(l => {
+                const letterEl = document.createElement('div');
+                letterEl.className = 'letter';
+                letterEl.textContent = l;
+                container.appendChild(letterEl);
+            });
+        }
+
+        // عرض الكلمات الممكنة
+        function renderWords() {
+            const container = document.getElementById('words');
+            container.innerHTML = "";
+            
+            const bag = letterBag(letters);
+            const possibleWords = dictionary.filter(w => canMakeWord(w, bag));
+            
+            document.getElementById('wordsCount').textContent = possibleWords.length;
+            
+            possibleWords.forEach(w => {
+                const wordEl = document.createElement('div');
+                wordEl.className = 'word';
+                wordEl.textContent = w;
+                container.appendChild(wordEl);
+            });
+        }
+
+        // إنشاء كيس الحروف
+        function letterBag(arr) {
+            const bag = {};
+            arr.forEach(ch => bag[ch] = (bag[ch] || 0) + 1);
+            return bag;
+        }
+
+        // التحقق من إمكانية تكوين الكلمة
+        function canMakeWord(word, bag) {
+            const need = {};
+            for (const ch of word) need[ch] = (need[ch] || 0) + 1;
+            for (const ch in need) {
+                if (!bag[ch] || need[ch] > bag[ch]) return false;
+            }
+            return true;
+        }
+
+        // بدء المؤقت
+        function startTimer(seconds) {
+            const timerEl = document.getElementById('timer');
+            const remainingTimeEl = document.getElementById('remainingTime');
+            
+            timerEl.textContent = seconds;
+            remainingTimeEl.textContent = seconds;
+            
+            if (seconds <= 10) {
+                timerEl.classList.add('warning');
+            } else {
+                timerEl.classList.remove('warning');
+            }
+            
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                seconds--;
+                timerEl.textContent = seconds;
+                remainingTimeEl.textContent = seconds;
+                
+                if (seconds <= 10) {
+                    timerEl.classList.add('warning');
+                }
+                
+                if (seconds <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('alarm').play();
+                    showNotification("انتهى الوقت!", "warning");
+                }
+            }, 1000);
+        }
+
+        // إعادة تعيين اللعبة
+        function resetGame() {
+            clearInterval(timerInterval);
+            document.getElementById('game').classList.add('hidden');
+            document.getElementById('setup').classList.remove('hidden');
+            document.getElementById('timer').classList.remove('warning');
+        }
+
+        // عرض الإشعارات
+        function showNotification(message, type = "success") {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            
+            if (type === "error") {
+                notification.style.backgroundColor = "#e74c3c";
+            } else if (type === "warning") {
+                notification.style.backgroundColor = "#f39c12";
+            } else {
+                notification.style.backgroundColor = "#27ae60";
+            }
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // تهيئة أولية
+        document.getElementById('manualInput').style.display = 'block';
+    </script>
+</body>
+</html>
