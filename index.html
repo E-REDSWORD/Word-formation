@@ -308,263 +308,263 @@ const AR = {
     "سنجاب", "آكل النمل", "خُلد", "قنفذ", "عقاب", "صقر", "بومة", "نحلة", "دبور",
     "دودة", "يرقة", "ضفدع", "سمندل"
   ],
-      arabicLetters: Array.from("ابتثجحخدذرزسشصضطظعغفقكلمنهويةء")
-    };
+  arabicLetters: Array.from("ابتثجحخدذرزسشصضطظعغفقكلمنهويةء")
+};
 
-    // أدوات مساعدة
-    const uniqueLettersFrom = (words) => {
-      const set = new Set();
-      words.join("").split("").forEach(ch => {
-        if (AR.arabicLetters.includes(ch)) set.add(ch);
-      });
-      return Array.from(set);
-    };
+// أدوات مساعدة
+const uniqueLettersFrom = (words) => {
+  const set = new Set();
+  words.join("").split("").forEach(ch => {
+    if (AR.arabicLetters.includes(ch)) set.add(ch);
+  });
+  return Array.from(set);
+};
 
-    const pick = (arr, n=1) => {
-      const copy = [...arr];
-      const out = [];
-      for (let i=0; i<n && copy.length; i++){
-        const idx = Math.floor(Math.random() * copy.length);
-        out.push(copy.splice(idx,1)[0]);
-      }
-      return out;
-    };
+const pick = (arr, n=1) => {
+  const copy = [...arr];
+  const out = [];
+  for (let i=0; i<n && copy.length; i++){
+    const idx = Math.floor(Math.random() * copy.length);
+    out.push(copy.splice(idx,1)[0]);
+  }
+  return out;
+};
 
-    const canBuild = (word, letters) => {
-      // نتأكد أن كل حرف موجود ضمن مجموعة الحروف (لا نضيف أحرف خارجة)
-      return word.split("").every(ch => letters.includes(ch));
-    };
+const canBuild = (word, letters) => {
+  // نتأكد أن كل حرف موجود ضمن مجموعة الحروف (لا نضيف أحرف خارجة)
+  return word.split("").every(ch => letters.includes(ch));
+};
 
-    const ensureBuildList = (list, letters) => list.filter(w => canBuild(w, letters));
+const ensureBuildList = (list, letters) => list.filter(w => canBuild(w, letters));
 
-    // توليد مثال واحد دقيق
-    function generateExample(){
-      const countries = pick(AR.countries, Math.random() < 0.7 ? 2 : 1);
-      const fruits    = pick(AR.fruits,    Math.random() < 0.8 ? 2 : 1);
-      const vegs      = pick(AR.vegetables,Math.random() < 0.8 ? 2 : 1);
-      const males     = pick(AR.male,      Math.random() < 0.8 ? 2 : 1);
-      const females   = pick(AR.female,    Math.random() < 0.8 ? 2 : 1);
-      const objects   = pick(AR.objects,   Math.random() < 0.8 ? 2 : 1);
-      const animals   = pick(AR.animals,   Math.random() < 0.8 ? 2 : 1);
+// توليد مثال واحد دقيق
+function generateExample(){
+  const countries = pick(AR.countries, Math.random() < 0.7 ? 2 : 1);
+  const fruits    = pick(AR.fruits,    Math.random() < 0.8 ? 2 : 1);
+  const vegs      = pick(AR.vegetables,Math.random() < 0.8 ? 2 : 1);
+  const males     = pick(AR.male,      Math.random() < 0.8 ? 2 : 1);
+  const females   = pick(AR.female,    Math.random() < 0.8 ? 2 : 1);
+  const objects   = pick(AR.objects,   Math.random() < 0.8 ? 2 : 1);
+  const animals   = pick(AR.animals,   Math.random() < 0.8 ? 2 : 1);
 
-      // الحروف = اتحاد حروف الكلمات
-      let letters = uniqueLettersFrom([
-        ...countries, ...fruits, ...vegs, ...males, ...females, ...objects, ...animals
-      ]);
+  // الحروف = اتحاد حروف الكلمات
+  let letters = uniqueLettersFrom([
+    ...countries, ...fruits, ...vegs, ...males, ...females, ...objects, ...animals
+  ]);
 
-      // اضبط عدد الحروف بين 8 و 12
-      if (letters.length > 12){
-        letters = pick(letters, 12);
-      } else if (letters.length < 8){
-        const extra = pick(AR.arabicLetters.filter(l => !letters.includes(l)), 8 - letters.length);
-        letters = [...letters, ...extra];
-      }
+  // اضبط عدد الحروف بين 7 و 10
+  if (letters.length > 10){
+    letters = pick(letters, 10);
+  } else if (letters.length < 7){
+    const extra = pick(AR.arabicLetters.filter(l => !letters.includes(l)), 7 - letters.length);
+    letters = [...letters, ...extra];
+  }
 
-      // تأكد أن الكلمات قابلة للبناء من هذه الحروف
-      const cOK  = ensureBuildList(countries, letters);
-      const fOK  = ensureBuildList(fruits, letters);
-      const vOK  = ensureBuildList(vegs, letters);
-      const mOK  = ensureBuildList(males, letters);
-      const feOK = ensureBuildList(females, letters);
-      const oOK  = ensureBuildList(objects, letters);
-      const aOK  = ensureBuildList(animals, letters);
+  // تأكد أن الكلمات قابلة للبناء من هذه الحروف
+  const cOK  = ensureBuildList(countries, letters);
+  const fOK  = ensureBuildList(fruits, letters);
+  const vOK  = ensureBuildList(vegs, letters);
+  const mOK  = ensureBuildList(males, letters);
+  const feOK = ensureBuildList(females, letters);
+  const oOK  = ensureBuildList(objects, letters);
+  const aOK  = ensureBuildList(animals, letters);
 
-      // تعويض الناقص إن لزم
-      function refill(target, sourceList, wantTwo){
-        const need = wantTwo ? 2 : 1;
-        if (target.length >= need) return target;
-        const options = sourceList.filter(w => canBuild(w, letters) && !target.includes(w));
-        while (target.length < need && options.length){
-          target.push(options.shift());
-        }
-        return target;
-      }
-
-      const finalCountries = refill(cOK, AR.countries, cOK.length===2);
-      const finalFruits    = refill(fOK, AR.fruits, true);
-      const finalVegs      = refill(vOK, AR.vegetables, true);
-      const finalMales     = refill(mOK, AR.male, true);
-      const finalFemales   = refill(feOK, AR.female, true);
-      const finalObjects   = refill(oOK, AR.objects, true);
-      const finalAnimals   = refill(aOK, AR.animals, true);
-
-      // العواصم: إن أمكن تكوينها من الحروف
-      const capsOptions = AR.capitals.filter(w => canBuild(w, letters));
-      const caps = capsOptions.length ? [capsOptions[Math.floor(Math.random()*capsOptions.length)]] : [];
-
-      return {
-        letters,
-        categories: [
-          { key: "countries", type: "دولة",       titleTwo: "استخرج اسم دولتان",         answers: finalCountries.slice(0,2) },
-          { key: "fruits",    type: "فاكهة",      titleTwo: "استخرج اسم فاكهتان",         answers: finalFruits.slice(0,2) },
-          { key: "vegetables",type: "نوع خضار",   titleTwo: "استخرج اسم نوعين خضار",      answers: finalVegs.slice(0,2) },
-          { key: "male",      type: "ولد",        titleTwo: "استخرج أسماء 2 أولاد",       answers: finalMales.slice(0,2) },
-          { key: "female",    type: "بنت",        titleTwo: "استخرج 2 أسماء بنات",        answers: finalFemales.slice(0,2) },
-          { key: "objects",   type: "جماد",       titleTwo: "استخرج 2 جماد",              answers: finalObjects.slice(0,2) },
-          { key: "animals",   type: "حيوان",      titleTwo: "استخرج اسماء 2 حيوانات",     answers: finalAnimals.slice(0,2) },
-          { key: "capitals",  type: "عاصمة دولة", titleTwo: "استخرج اسم عاصمة دولة",     answers: caps.slice(0,1) }
-        ]
-      };
+  // تعويض الناقص إن لزم
+  function refill(target, sourceList, wantTwo){
+    const need = wantTwo ? 2 : 1;
+    if (target.length >= need) return target;
+    const options = sourceList.filter(w => canBuild(w, letters) && !target.includes(w));
+    while (target.length < need && options.length){
+      target.push(options.shift());
     }
+    return target;
+  }
 
-    // توليد 107 مثالًا مع فحص الدقة
-    function generateExamples(count=107){
-      const examples = [];
-      let safety = 0;
-      while (examples.length < count && safety < count*8){
-        const ex = generateExample();
-        // الفئات الأساسية (عدا العاصمة) يجب أن تحتوي ≥1 إجابة
-        const essentialOK = ex.categories.slice(0,7).every(cat => cat.answers.length >= 1);
-        if (essentialOK){
-          examples.push(ex);
-        }
-        safety++;
-      }
-      while (examples.length < count){
-        examples.push(generateExample());
-      }
-      return examples;
+  const finalCountries = refill(cOK, AR.countries, cOK.length===2);
+  const finalFruits    = refill(fOK, AR.fruits, true);
+  const finalVegs      = refill(vOK, AR.vegetables, true);
+  const finalMales     = refill(mOK, AR.male, true);
+  const finalFemales   = refill(feOK, AR.female, true);
+  const finalObjects   = refill(oOK, AR.objects, true);
+  const finalAnimals   = refill(aOK, AR.animals, true);
+
+  // العواصم: إن أمكن تكوينها من الحروف
+  const capsOptions = AR.capitals.filter(w => canBuild(w, letters));
+  const caps = capsOptions.length ? [capsOptions[Math.floor(Math.random()*capsOptions.length)]] : [];
+
+  return {
+    letters,
+    categories: [
+      { key: "countries", type: "دولة",       titleTwo: "استخرج اسم دولتان",         answers: finalCountries.slice(0,2) },
+      { key: "fruits",    type: "فاكهة",      titleTwo: "استخرج اسم فاكهتان",         answers: finalFruits.slice(0,2) },
+      { key: "vegetables",type: "نوع خضار",   titleTwo: "استخرج اسم نوعين خضار",      answers: finalVegs.slice(0,2) },
+      { key: "male",      type: "ولد",        titleTwo: "استخرج أسماء 2 أولاد",       answers: finalMales.slice(0,2) },
+      { key: "female",    type: "بنت",        titleTwo: "استخرج 2 أسماء بنات",        answers: finalFemales.slice(0,2) },
+      { key: "objects",   type: "جماد",       titleTwo: "استخرج 2 جماد",              answers: finalObjects.slice(0,2) },
+      { key: "animals",   type: "حيوان",      titleTwo: "استخرج اسماء 2 حيوانات",     answers: finalAnimals.slice(0,2) },
+      { key: "capitals",  type: "عاصمة دولة", titleTwo: "استخرج اسم عاصمة دولة",     answers: caps.slice(0,1) }
+    ]
+  };
+}
+
+// توليد 107 مثالًا مع فحص الدقة
+function generateExamples(count=107){
+  const examples = [];
+  let safety = 0;
+  while (examples.length < count && safety < count*8){
+    const ex = generateExample();
+    // الفئات الأساسية (عدا العاصمة) يجب أن تحتوي ≥1 إجابة
+    const essentialOK = ex.categories.slice(0,7).every(cat => cat.answers.length >= 1);
+    if (essentialOK){
+      examples.push(ex);
     }
+    safety++;
+  }
+  while (examples.length < count){
+    examples.push(generateExample());
+  }
+  return examples;
+}
 
-    // شبكة 107 مربعًا — أرقام فقط
-    const CELLS = Array.from({length:107}, (_,i)=>({label:String(i+1)}));
+// شبكة 107 مربعًا — أرقام فقط
+const CELLS = Array.from({length:107}, (_,i)=>({label:String(i+1)}));
 
-    // أمثلة 107 مع التوزيع العشوائي
-    let EXAMPLES = generateExamples(107);
-    let cellToExampleIndex = [];
+// أمثلة 107 مع التوزيع العشوائي
+let EXAMPLES = generateExamples(107);
+let cellToExampleIndex = [];
 
-    function shuffleMapping(){
-      const indices = Array.from({length: EXAMPLES.length}, (_,i)=>i);
-      for (let i = indices.length - 1; i > 0; i--){
-        const j = Math.floor(Math.random() * (i+1));
-        [indices[i], indices[j]] = [indices[j], indices[i]];
-      }
-      cellToExampleIndex = indices;
-    }
+function shuffleMapping(){
+  const indices = Array.from({length: EXAMPLES.length}, (_,i)=>i);
+  for (let i = indices.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i+1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+  cellToExampleIndex = indices;
+}
 
-    function renderGrid(){
-      const grid = document.getElementById("grid");
-      grid.innerHTML = "";
-      CELLS.forEach((cell, idx)=>{
-        const div = document.createElement("button");
-        div.className = "cell";
-        div.setAttribute("title","عرض المثال");
-        div.textContent = cell.label;
-        div.addEventListener("click", ()=> showExample(idx));
-        grid.appendChild(div);
-      });
-    }
+function renderGrid(){
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+  CELLS.forEach((cell, idx)=>{
+    const div = document.createElement("button");
+    div.className = "cell";
+    div.setAttribute("title","عرض المثال");
+    div.textContent = cell.label;
+    div.addEventListener("click", ()=> showExample(idx));
+    grid.appendChild(div);
+  });
+}
 
-    // نص المنسوخ الذكي حسب عدد الإجابات
-    function promptText(type, count){
-      const mapZero = {
-        "دولة":"لا يوجد استخراج لاسم دولة",
-        "فاكهة":"لا يوجد استخراج لاسم فاكهة",
-        "نوع خضار":"لا يوجد استخراج لاسم نوع خضار",
-        "ولد":"لا يوجد استخراج لاسم ولد",
-        "بنت":"لا يوجد استخراج لاسم بنت",
-        "جماد":"لا يوجد استخراج لاسم جماد",
-        "حيوان":"لا يوجد استخراج لاسم حيوان",
-        "عاصمة دولة":"لا يوجد استخراج لاسم عاصمة دولة"
-      };
-      const mapOne = {
-        "دولة":"استخرج اسم دولة واحدة",
-        "فاكهة":"استخرج اسم فاكهة واحدة",
-        "نوع خضار":"استخرج اسم نوع خضار واحد",
-        "ولد":"استخرج اسم ولد واحد",
-        "بنت":"استخرج اسم بنت واحدة",
-        "جماد":"استخرج اسم جماد واحد",
-        "حيوان":"استخرج اسم حيوان واحد",
-        "عاصمة دولة":"استخرج اسم عاصمة دولة"
-      };
-      const mapTwo = {
-        "دولة":"استخرج اسم دولتان",
-        "فاكهة":"استخرج اسم فاكهتان",
-        "نوع خضار":"استخرج اسم نوعين خضار",
-        "ولد":"استخرج اسمي ولدين",
-        "بنت":"استخرج اسمي بنتين",
-        "جماد":"استخرج اسمين جماد",
-        "حيوان":"استخرج اسمين حيوانات",
-        "عاصمة دولة":"استخرج اسم عاصمة دولة"
-      };
-      if (count === 0) return mapZero[type] || `لا يوجد استخراج لاسم ${type}`;
-      if (count === 1) return mapOne[type] || `استخرج اسم ${type} واحدة`;
-      if (count === 2) return mapTwo[type] || `استخرج اسم ${type} اثنتان`;
-      return `استخرج ${count} ${type}`;
-    }
+// نص المنسوخ الذكي حسب عدد الإجابات
+function promptText(type, count){
+  const mapZero = {
+    "دولة":"لا يوجد استخراج لاسم دولة",
+    "فاكهة":"لا يوجد استخراج لاسم فاكهة",
+    "نوع خضار":"لا يوجد استخراج لاسم نوع خضار",
+    "ولد":"لا يوجد استخراج لاسم ولد",
+    "بنت":"لا يوجد استخراج لاسم بنت",
+    "جماد":"لا يوجد استخراج لاسم جماد",
+    "حيوان":"لا يوجد استخراج لاسم حيوان",
+    "عاصمة دولة":"لا يوجد استخراج لاسم عاصمة دولة"
+  };
+  const mapOne = {
+    "دولة":"استخرج اسم دولة واحدة",
+    "فاكهة":"استخرج اسم فاكهة واحدة",
+    "نوع خضار":"استخرج اسم نوع خضار واحد",
+    "ولد":"استخرج اسم ولد واحد",
+    "بنت":"استخرج اسم بنت واحدة",
+    "جماد":"استخرج اسم جماد واحد",
+    "حيوان":"استخرج اسم حيوان واحد",
+    "عاصمة دولة":"استخرج اسم عاصمة دولة"
+  };
+  const mapTwo = {
+    "دولة":"استخرج اسم دولتان",
+    "فاكهة":"استخرج اسم فاكهتان",
+    "نوع خضار":"استخرج اسم نوعين خضار",
+    "ولد":"استخرج اسمي ولدين",
+    "بنت":"استخرج اسمي بنتين",
+    "جماد":"استخرج اسمين جماد",
+    "حيوان":"استخرج اسمين حيوانات",
+    "عاصمة دولة":"استخرج اسم عاصمة دولة"
+  };
+  if (count === 0) return mapZero[type] || `لا يوجد استخراج لاسم ${type}`;
+  if (count === 1) return mapOne[type] || `استخرج اسم ${type} واحدة`;
+  if (count === 2) return mapTwo[type] || `استخرج اسم ${type} اثنتان`;
+  return `استخرج ${count} ${type}`;
+}
 
-    function showExample(cellIndex){
-      const exampleIndex = cellToExampleIndex[cellIndex];
-      const ex = EXAMPLES[exampleIndex];
-      const panel = document.getElementById("panel");
-      const lettersBox = document.getElementById("lettersBox");
-      const itemsList = document.getElementById("itemsList");
+function showExample(cellIndex){
+  const exampleIndex = cellToExampleIndex[cellIndex];
+  const ex = EXAMPLES[exampleIndex];
+  const panel = document.getElementById("panel");
+  const lettersBox = document.getElementById("lettersBox");
+  const itemsList = document.getElementById("itemsList");
 
-      lettersBox.innerHTML = `<b>الحروف:</b> [ ${ex.letters.join("، ")} ]`;
-      itemsList.innerHTML = "";
+  lettersBox.innerHTML = `<b>الحروف:</b> [ ${ex.letters.join("، ")} ]`;
+  itemsList.innerHTML = "";
 
-      ex.categories.forEach(cat=>{
-        // لا نعرض العاصمة إن لم تكن موجودة
-        if (cat.key === "capitals" && cat.answers.length === 0) return;
-        const item = document.createElement("div");
-        item.className = "item";
-        const h3 = document.createElement("h3");
-        h3.textContent = promptText(cat.type, cat.answers.length);
-        const p = document.createElement("div");
-        p.className = "answers";
-        p.innerHTML = cat.answers.length ? cat.answers.join(" - ") : `<span class="ok">—</span>`;
-        item.appendChild(h3);
-        item.appendChild(p);
-        itemsList.appendChild(item);
-      });
+  ex.categories.forEach(cat=>{
+    // لا نعرض العاصمة إن لم تكن موجودة
+    if (cat.key === "capitals" && cat.answers.length === 0) return;
+    const item = document.createElement("div");
+    item.className = "item";
+    const h3 = document.createElement("h3");
+    h3.textContent = promptText(cat.type, cat.answers.length);
+    const p = document.createElement("div");
+    p.className = "answers";
+    p.innerHTML = cat.answers.length ? cat.answers.join(" - ") : `<span class="ok">—</span>`;
+    item.appendChild(h3);
+    item.appendChild(p);
+    itemsList.appendChild(item);
+  });
 
-      const copyBtn = document.getElementById("copyBtn");
-      copyBtn.onclick = ()=>{
-        const lines = [];
-        lines.push("ألعاب - 𖤍|𝐑𝐄𝐃𝐒𝐖𝐎𝐑𝐃");
-        lines.push("لعبة تكوين الكلمات.");
-        lines.push("----------------------");
-        lines.push("الحروف : ");
-        lines.push("[ " + ex.letters.join("، ") + " ]");
-        ex.categories.forEach(cat=>{
-          // في النص المنسوخ ندرج العاصمة فقط إن كانت موجودة
-          if (cat.key === "capitals" && cat.answers.length === 0) return;
-          lines.push(promptText(cat.type, cat.answers.length));
-        });
-        lines.push("______________");
-        const text = lines.join("\n");
-        navigator.clipboard.writeText(text).then(()=>{
-          copyBtn.textContent = "تم النسخ ✅";
-          setTimeout(()=> copyBtn.textContent = "نسخ المثال (بدون إجابات)", 1200);
-        }).catch(()=>{
-          alert("لم يتم النسخ. يُرجى السماح للمتصفح بالوصول للحافظة.");
-        });
-      };
+  const copyBtn = document.getElementById("copyBtn");
+  copyBtn.onclick = ()=>{
+    const lines = [];
+    lines.push("ألعاب - 𖤍|𝐑𝐄𝐃𝐒𝐖𝐎𝐑𝐃");
+    lines.push("لعبة تكوين الكلمات.");
+    lines.push("----------------------");
+    lines.push("الحروف : ");
+    lines.push("[ " + ex.letters.join("، ") + " ]");
+    ex.categories.forEach(cat=>{
+      // في النص المنسوخ ندرج العاصمة فقط إن كانت موجودة
+      if (cat.key === "capitals" && cat.answers.length === 0) return;
+      lines.push(promptText(cat.type, cat.answers.length));
+    });
+    lines.push("______________");
+    const text = lines.join("\n");
+    navigator.clipboard.writeText(text).then(()=>{
+      copyBtn.textContent = "تم النسخ ✅";
+      setTimeout(()=> copyBtn.textContent = "نسخ المثال (بدون إجابات)", 1200);
+    }).catch(()=>{
+      alert("لم يتم النسخ. يُرجى السماح للمتصفح بالوصول للحافظة.");
+    });
+  };
 
-      document.getElementById("panelTitle").textContent = "المثال المختار";
-      panel.classList.remove("hidden");
+  document.getElementById("panelTitle").textContent = "المثال المختار";
+  panel.classList.remove("hidden");
 
-      document.getElementById("closeBtn").onclick = ()=>{
-        panel.classList.add("hidden");
-      };
-    }
+  document.getElementById("closeBtn").onclick = ()=>{
+    panel.classList.add("hidden");
+  };
+}
 
-    // أزرار الأدوات
-    document.getElementById("shuffleBtn").onclick = ()=>{
-      shuffleMapping();
-      document.getElementById("shuffleBtn").textContent = "أُعيد التوزيع ✅";
-      setTimeout(()=> document.getElementById("shuffleBtn").textContent = "إعادة التوزيع الآن", 1200);
-    };
-    document.getElementById("reloadBtn").onclick = ()=>{
-      location.reload();
-    };
+// أزرار الأدوات
+document.getElementById("shuffleBtn").onclick = ()=>{
+  shuffleMapping();
+  document.getElementById("shuffleBtn").textContent = "أُعيد التوزيع ✅";
+  setTimeout(()=> document.getElementById("shuffleBtn").textContent = "إعادة التوزيع الآن", 1200);
+};
+document.getElementById("reloadBtn").onclick = ()=>{
+  location.reload();
+};
 
-    // تهيئة الصفحة
-    function init(){
-      renderGrid();
-      shuffleMapping();
-    }
-    init();
+// تهيئة الصفحة
+function init(){
+  renderGrid();
+  shuffleMapping();
+}
+init();
   </script>
 </body>
 </html>
