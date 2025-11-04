@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
   <title>ألعاب - 𖤍|𝐑𝐄𝐃𝐒𝐖𝐎𝐑𝐃 | لعبة تكوين الكلمات</title>
   <style>
     :root{
@@ -13,96 +13,105 @@
       --muted:#94a3b8;
       --good:#10b981;
       --grid:#161b22;
+      --card:#0e1217;
+      --border:#222b36;
     }
     *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
-      font-family: "Cairo", system-ui, -apple-system, Segoe UI, Roboto, "Noto Naskh Arabic", Arial, sans-serif;
+      font-family:"Cairo", system-ui, -apple-system, Segoe UI, Roboto, "Noto Naskh Arabic", Arial, sans-serif;
       background: radial-gradient(1200px 600px at 70% -10%, #1f2430 0%, #0b0f12 50%, #06080b 100%);
       color:var(--text);
     }
     header{
-      padding:24px 16px;
+      padding:18px 14px;
       text-align:center;
       border-bottom:1px solid #1f2937;
       background:linear-gradient(180deg, rgba(225,29,72,.12), rgba(225,29,72,0));
+      position:sticky; top:0; z-index:10;
+      backdrop-filter:saturate(1.2) blur(6px);
     }
     header h1{
-      margin:0 0 8px;
-      font-size:28px;
-      letter-spacing:0.4px;
+      margin:0 0 6px;
+      font-size:20px;
+      letter-spacing:.2px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
     }
     header p{
       margin:0;
       color:var(--muted);
-      font-size:14px;
+      font-size:13px;
     }
     .container{
-      max-width:1100px;
-      margin:24px auto;
-      padding:0 16px;
+      max-width:980px;
+      margin:14px auto 24px;
+      padding:0 12px;
     }
     .toolbar{
       display:flex;
-      gap:12px;
+      gap:8px;
       flex-wrap:wrap;
       align-items:center;
-      margin-bottom:16px;
+      margin-bottom:10px;
     }
     .toolbar button{
       background:var(--accent);
       color:#fff;
       border:none;
-      padding:10px 14px;
-      border-radius:10px;
+      padding:10px 12px;
+      border-radius:12px;
       cursor:pointer;
       font-weight:700;
       box-shadow:0 6px 16px rgba(225,29,72,.25);
+      font-size:14px;
     }
     .toolbar button.secondary{
       background:#222b36;
       color:var(--text);
       box-shadow:none;
       border:1px solid #293241;
+      font-weight:600;
     }
     .toolbar .note{
       color:var(--muted);
-      font-size:13px;
+      font-size:12px;
       margin-inline-start:auto;
     }
     .grid{
       display:grid;
       grid-template-columns: repeat(12, 1fr);
-      gap:8px;
+      gap:6px;
       background:var(--grid);
-      padding:12px;
+      padding:10px;
       border-radius:16px;
       border:1px solid #1f2937;
     }
     .cell{
-      background:#0e1217;
-      border:1px solid #222b36;
-      border-radius:10px;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:12px;
       padding:8px 6px;
       text-align:center;
       font-size:14px;
       cursor:pointer;
       user-select:none;
-      transition:transform .08s ease, box-shadow .12s ease, border-color .12s ease;
+      transition:transform .08s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
       color:#dbe2ea;
+      min-height:38px;
+      display:flex; align-items:center; justify-content:center;
     }
     .cell:hover{
-      transform:translateY(-2px);
+      transform:translateY(-1px);
       border-color:#334155;
+      background:#121720;
       box-shadow:0 4px 12px rgba(0,0,0,.25);
     }
-    .cell .emoji{
-      font-size:18px;
-      display:block;
-      line-height:1.3;
-    }
+    .cell .emoji{font-size:18px; line-height:1.2}
     .panel{
-      margin-top:18px;
+      margin-top:12px;
       background:var(--panel);
       border:1px solid #1f2937;
       border-radius:16px;
@@ -112,13 +121,14 @@
       background:#121820;
       border-bottom:1px solid #1f2937;
       text-align:start;
+      padding:12px 14px;
     }
     .panel header h2{
       margin:0;
-      font-size:18px;
+      font-size:16px;
     }
-    .panel .content{
-      padding:16px;
+    .content{
+      padding:12px;
     }
     .letters{
       background:#0d1319;
@@ -126,15 +136,13 @@
       border-radius:12px;
       padding:10px 12px;
       margin-bottom:12px;
-      font-size:16px;
+      font-size:15px;
     }
-    .letters b{
-      color:#cbd5e1;
-    }
+    .letters b{color:#cbd5e1}
     .list{
       display:grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap:12px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:10px;
     }
     .item{
       background:#0e141b;
@@ -144,31 +152,25 @@
     }
     .item h3{
       margin:0 0 6px;
-      font-size:15px;
+      font-size:14px;
       color:#cbd5e1;
     }
-    .answers{
-      color:#e2e8f0;
-      font-size:15px;
-    }
-    .answers .ok{
-      color:var(--good);
-      font-weight:700;
-    }
+    .answers{color:#e2e8f0; font-size:14px}
     .actions{
       display:flex;
       gap:8px;
-      padding:12px 16px;
+      padding:10px 12px;
       border-top:1px solid #1f2937;
       background:#11161b;
     }
     .actions button{
       padding:10px 12px;
-      border-radius:10px;
+      border-radius:12px;
       border:1px solid #293241;
       background:#222b36;
       color:var(--text);
       cursor:pointer;
+      font-size:14px;
     }
     .actions button.copy{
       background:var(--accent);
@@ -180,42 +182,37 @@
     .footer-note{
       color:var(--muted);
       font-size:12px;
-      padding:10px 16px;
+      padding:10px 12px;
       border-top:1px dashed #24303f;
       background:#0f1318;
     }
     .hidden{display:none}
-    .brand{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      font-weight:800;
-      color:#fff;
-    }
-    .brand .blade{
-      color:var(--accent);
-      font-size:20px;
-    }
+    .brand{display:inline-flex; align-items:center; gap:8px; font-weight:800; color:#fff}
+    .brand .blade{color:var(--accent); font-size:20px}
     @media (max-width:900px){
       .grid{grid-template-columns: repeat(8, 1fr);}
       .list{grid-template-columns: 1fr;}
+      header h1{font-size:18px}
     }
     @media (max-width:600px){
       .grid{grid-template-columns: repeat(6, 1fr);}
+      .cell{min-height:42px; font-size:15px}
+      .letters{font-size:16px}
+      .answers{font-size:15px}
     }
   </style>
 </head>
 <body>
   <header>
     <h1 class="brand"><span class="blade">𖤍</span>|𝐑𝐄𝐃𝐒𝐖𝐎𝐑𝐃 — لعبة تكوين الكلمات</h1>
-    <p>انقر على أي مربع (رقم أو إيموجي) لعرض المثال المخزّن. يعاد توزيع الأمثلة عشوائيًا عند تحديث الصفحة.</p>
+    <p>انقر على أي مربع (رقم أو إيموجي) لعرض المثال المخزّن. يُعاد توزيع الأمثلة عشوائيًا عند تحديث الصفحة.</p>
   </header>
 
   <div class="container">
     <div class="toolbar">
       <button id="shuffleBtn" class="secondary" title="إعادة توزيع الأمثلة">إعادة التوزيع الآن</button>
       <button id="reloadBtn" class="secondary" title="تحديث الصفحة">تحديث الصفحة</button>
-      <span class="note">عدد المربعات: 92 — جميع الأمثلة دقيقة وتلتزم بالحروف الخاصة بها.</span>
+      <span class="note">عدد المربعات: 107 — جميع الأمثلة دقيقة وتلتزم بالحروف الخاصة بها.</span>
     </div>
 
     <div id="grid" class="grid" aria-label="شبكة أمثلة اللعبة"></div>
@@ -240,40 +237,41 @@
 
   <script>
     // ————————————————
-    // بيانات مرجعية (قوائم عربية دقيقة)
+    // قوائم مرجعية عربية دقيقة
     // ————————————————
-
     const AR = {
       countries: [
         "السودان","لبنان","اليمن","سوريا","الأردن","عُمان","إيران","مصر",
-        "ليبيا","تونس","الجزائر","المغرب","العراق","البحرين","الكويت","قطر","تركيا"
+        "ليبيا","تونس","الجزائر","المغرب","العراق","البحرين","الكويت","قطر","تركيا","موريتانيا","فلسطين"
       ],
       capitals: [
-        "روما","بيروت","صنعاء","دمشق","عمان","الدوحة","المنامة","الرياض","القاهرة","بغداد","الجزائر","تونس","نواكشوط","طرابلس"
+        "روما","بيروت","صنعاء","دمشق","عمان","الدوحة","المنامة","الرياض","القاهرة",
+        "بغداد","الجزائر","تونس","نواكشوط","طرابلس","أنقرة","الرباط","الكويت"
       ],
       fruits: [
-        "رمان","ليمون","تفاح","موز","عنب","تين","تمر","مانجو","بطيخ","خوخ","كمثرى","كيوي"
+        "رمان","ليمون","تفاح","موز","عنب","تين","تمر","مانجو","بطيخ","خوخ","كمثرى","كيوي","فراولة"
       ],
       vegetables: [
-        "بصل","جزر","خيار","كوسة","فلفل","طماطم","بطاطس","باميا","لوبيا","نعناع","ملوخية","قرنبيط"
+        "بصل","جزر","خيار","كوسة","فلفل","طماطم","بطاطس","باميا","لوبيا","نعناع","ملوخية","قرنبيط","كرفس","سبانخ"
       ],
       male: [
-        "رامي","سامي","وليد","باسل","نور","ناصر","عماد","أمين","سليم","مراد","أنور","مازن","رائد","ليث"
+        "رامي","سامي","وليد","باسل","نور","ناصر","عماد","أمين","سليم","مراد","أنور","مازن","رائد","ليث","منير","نادر"
       ],
       female: [
-        "لينا","نوال","سمر","رنا","مروى","منى","رندا","نورا","ليان","ريم","سلوى","آمال","منار","سناء"
+        "لينا","نوال","سمر","رنا","مروى","منى","رندا","نورا","ليان","ريم","سلوى","آمال","منار","سناء","نادية","مريم"
       ],
       objects: [
-        "باب","قلم","كتاب","سيف","كرسي","هاتف","مفتاح","مصباح","منديل","كوب","طبق","ساعة","مرآة","حاسوب","سيارة"
+        "باب","قلم","كتاب","سيف","كرسي","هاتف","مفتاح","مصباح","منديل","كوب","طبق","ساعة","مرآة","حاسوب","سيارة","لوح","جرس","مغناطيس"
       ],
       animals: [
-        "أسد","أرنب","بومة","قط","كلب","نمر","حصان","جمل","غزال","فهد","ثور","بقر","قطة","ديك","بطة","حمامة","سمكة","ضفدع","ثعلب"
+        "أسد","أرنب","بومة","قط","كلب","نمر","حصان","جمل","غزال","فهد","ثور","بقرة","ديك","بطة","حمامة","سمكة","ضفدع","ثعلب","وزة","غزال"
       ],
       arabicLetters: Array.from("ابتثجحخدذرزسشصضطظعغفقكلمنهويةء")
     };
 
-    // بعض الكلمات تحتوي حروف لا نتوفر عليها في كل مثال، لذلك سنبني الأمثلة انطلاقًا من الكلمات ثم نستخرج الحروف.
-    // دالة استخراج حروف فريدة من الكلمات:
+    // ————————————————
+    // أدوات مساعدة
+    // ————————————————
     const uniqueLettersFrom = (words) => {
       const set = new Set();
       words.join("").split("").forEach(ch => {
@@ -282,7 +280,6 @@
       return Array.from(set);
     };
 
-    // اختيار عشوائي من مصفوفة:
     const pick = (arr, n=1) => {
       const copy = [...arr];
       const out = [];
@@ -293,21 +290,17 @@
       return out;
     };
 
-    // التحقق أن الكلمة تُبنى من مجموعة الحروف:
     const canBuild = (word, letters) => {
-      const pool = letters.slice();
-      for (const ch of word.split("")){
-        const i = pool.indexOf(ch);
-        if (i === -1) return false;
-        pool.splice(i,1);
-      }
-      return true;
+      // نتحقق من توفر كل حرف من كلمة ضمن مجموعة الحروف (تكرار الحرف لا يلزم، لأنها من حروف متاحة فحسب)
+      return word.split("").every(ch => letters.includes(ch));
     };
 
-    // توليد مثال واحد يفي بالقاعدة: دولة(ـان)، فاكهة(ـان)، خضار(ـان)، أولاد(ـان)، بنات(ـان)، جماد(ـان)، حيوانات(ـان)، عاصمة إن وجدت
-    // نبني الكلمات أولًا ثم الحروف كاتحادها لضمان صحة البناء.
+    const ensureBuildList = (list, letters) => list.filter(w => canBuild(w, letters));
+
+    // ————————————————
+    // توليد مثال واحد دقيق
+    // ————————————————
     function generateExample(){
-      // اختر 1 أو 2 لكل فئة
       const countries = pick(AR.countries, Math.random() < 0.7 ? 2 : 1);
       const fruits    = pick(AR.fruits,    Math.random() < 0.8 ? 2 : 1);
       const vegs      = pick(AR.vegetables,Math.random() < 0.8 ? 2 : 1);
@@ -316,12 +309,12 @@
       const objects   = pick(AR.objects,   Math.random() < 0.8 ? 2 : 1);
       const animals   = pick(AR.animals,   Math.random() < 0.8 ? 2 : 1);
 
-      // كوّن الحروف من كل الكلمات المختارة
+      // الحروف = اتحاد الحروف في الكلمات المختارة
       let letters = uniqueLettersFrom([
         ...countries, ...fruits, ...vegs, ...males, ...females, ...objects, ...animals
       ]);
 
-      // قلص/وسع عدد الحروف ليكون بين 8 و 12
+      // اضبط عدد الحروف بين 8 و 12
       if (letters.length > 12){
         letters = pick(letters, 12);
       } else if (letters.length < 8){
@@ -329,19 +322,18 @@
         letters = [...letters, ...extra];
       }
 
-      // تحقق من أن كل كلمة قابلة للبناء فعلاً بهذه الحروف (بعض التقليص قد يحذف حرفًا)
-      const ensureBuild = (list) => list.filter(w => canBuild(w, letters));
-      const cOK = ensureBuild(countries);
-      const fOK = ensureBuild(fruits);
-      const vOK = ensureBuild(vegs);
-      const mOK = ensureBuild(males);
-      const feOK= ensureBuild(females);
-      const oOK = ensureBuild(objects);
-      const aOK = ensureBuild(animals);
+      // تأكد أن كل كلمة قابلة للبناء من الحروف بعد التقليص
+      const cOK = ensureBuildList(countries, letters);
+      const fOK = ensureBuildList(fruits, letters);
+      const vOK = ensureBuildList(vegs, letters);
+      const mOK = ensureBuildList(males, letters);
+      const feOK= ensureBuildList(females, letters);
+      const oOK = ensureBuildList(objects, letters);
+      const aOK = ensureBuildList(animals, letters);
 
-      // إن فُقدت عناصر بسبب التقليص، عُوضها بكلمات بديلة من نفس الفئة تتوافق مع الحروف الحالية
-      function refill(target, sourceList, preferTwo=true){
-        const need = preferTwo ? 2 : 1;
+      // حاول تعويض الناقص إن لزم
+      function refill(target, sourceList, wantTwo){
+        const need = wantTwo ? 2 : 1;
         if (target.length >= need) return target;
         const options = sourceList.filter(w => canBuild(w, letters) && !target.includes(w));
         while (target.length < need && options.length){
@@ -358,72 +350,68 @@
       const finalObjects   = refill(oOK, AR.objects, true);
       const finalAnimals   = refill(aOK, AR.animals, true);
 
-      // عاصمة: نضيفها فقط إذا كانت قابلة للبناء من نفس الحروف
+      // العواصم: اختيار واحدة فقط إن كانت قابلة للبناء
       const capsOptions = AR.capitals.filter(w => canBuild(w, letters));
       const caps = capsOptions.length ? [capsOptions[Math.floor(Math.random()*capsOptions.length)]] : [];
 
       return {
         letters,
         categories: [
-          { title: "استخرج اسم دولتان", answers: finalCountries.slice(0,2) },
-          { title: "استخرج اسم فاكهتان", answers: finalFruits.slice(0,2) },
-          { title: "استخرج اسم نوعين خضار", answers: finalVegs.slice(0,2) },
-          { title: "استخرج أسماء 2 أولاد", answers: finalMales.slice(0,2) },
-          { title: "استخرج 2 أسماء بنات", answers: finalFemales.slice(0,2) },
-          { title: "استخرج 2 جماد", answers: finalObjects.slice(0,2) },
-          { title: "استخرج اسماء 2 حيوانات", answers: finalAnimals.slice(0,2) },
-          { title: "استخرج اسم عاصمة دولة", answers: caps.slice(0,1) } // تُعرض فقط إن وجدت
+          { key: "countries", type: "دولة", titleTwo: "استخرج اسم دولتان", answers: finalCountries.slice(0,2) },
+          { key: "fruits",    type: "فاكهة", titleTwo: "استخرج اسم فاكهتان", answers: finalFruits.slice(0,2) },
+          { key: "vegetables",type: "نوع خضار", titleTwo: "استخرج اسم نوعين خضار", answers: finalVegs.slice(0,2) },
+          { key: "male",      type: "ولد", titleTwo: "استخرج أسماء 2 أولاد", answers: finalMales.slice(0,2) },
+          { key: "female",    type: "بنت", titleTwo: "استخرج 2 أسماء بنات", answers: finalFemales.slice(0,2) },
+          { key: "objects",   type: "جماد", titleTwo: "استخرج 2 جماد", answers: finalObjects.slice(0,2) },
+          { key: "animals",   type: "حيوان", titleTwo: "استخرج اسماء 2 حيوانات", answers: finalAnimals.slice(0,2) },
+          { key: "capitals",  type: "عاصمة دولة", titleTwo: "استخرج اسم عاصمة دولة", answers: caps.slice(0,1) }
         ]
       };
     }
 
-    // لتأكيد الدقة، سنولد 92 مثالًا ونضمن أن كل فئة لديها على الأقل عنصر واحد،
-    // والعاصمة قد تكون غائبة إن لم يمكن بناؤها من الحروف.
-    function generateExamples92(){
+    // ————————————————
+    // توليد 107 مثالًا مع فحص الدقة
+    // ————————————————
+    function generateExamples(count=107){
       const examples = [];
       let safety = 0;
-      while (examples.length < 92 && safety < 500){
+      while (examples.length < count && safety < count*8){
         const ex = generateExample();
-        // تحقُّق: كل الفئات الأساسية يجب أن تحتوي ≥1 إجابة
+        // تأكد أن الفئات الأساسية (عدا العاصمة) لديها على الأقل عنصر واحد
         const essentialOK = ex.categories.slice(0,7).every(cat => cat.answers.length >= 1);
         if (essentialOK){
           examples.push(ex);
         }
         safety++;
       }
-      // إذا لأي سبب لم نصل 92، نعيد المحاولة بزيادة السقف
-      while (examples.length < 92){
+      while (examples.length < count){
         examples.push(generateExample());
       }
       return examples;
     }
 
     // ————————————————
-    // شبكة 92 مربّعًا (أرقام + إيموجيّات)
+    // شبكة 107 مربّعًا
     // ————————————————
-
     const CELLS = [
       // 30 أرقام
       ...Array.from({length:30}, (_,i)=>({label:String(i+1)})),
-      // 20 حيوانات (من طلبك)
+      // 20 حيوانات
       ..."🐘🦒🦁🦌🐪🦘🐎🐄🐸🐟🐢🐍🐈🐀🐓🦆🕊🦋🐌🐇".split("").map(e=>({label:e, isEmoji:true})),
-      // 19 رموز/أشياء
+      // 19 رموز
       ..."❤👁✈⚽✏🪶🌛⭐✉📞📷🔍🧲💣🔑🔒🏠💼🎵💡".split("").map(e=>({label:e, isEmoji:true})),
-      // 21 فواكه/خضار إيموجي (المجموعة المقدمة + اثنان إضافيان للوصول إلى 92)
-      ..."🍓🍎🍉🥭🍍🍌🍇🥝🍋🥥🫚🥕🧅🥔🍄‍🟫🥒🥑🧄🫑🥬🌽".split("").map(e=>({label:e, isEmoji:true})),
-      // لإكمال إلى 92: رقمان إضافيان
-      {label:"31"},{label:"32"}
-    ].slice(0,92);
+      // 22 فواكه/خضار
+      ..."🍓🍎🍉🥭🍍🍌🍇🥝🍋🥥🫚🥕🧅🥔🍄🟫🥒🥑🧄🫑🥬🌽".split("").map(e=>({label:e, isEmoji:true})),
+      // 16 أعلام دول
+      ..."🇸🇦🇾🇪🇦🇷🇨🇦🇫🇷🇬🇧🇮🇶🇺🇲🇯🇵🇪🇦🇩🇿🇩🇪🇪🇬🇲🇦🇦🇪".split("").map(e=>({label:e, isEmoji:true}))
+    ].slice(0,107);
 
-    // أمثلة 92 مع التوزيع العشوائي
-    let EXAMPLES = generateExamples92();
-
-    // عند إعادة التوزيع: نعيد خلط الأمثلة مع الخلايا
+    // أمثلة 107 مع التوزيع العشوائي
+    let EXAMPLES = generateExamples(107);
     let cellToExampleIndex = [];
 
     function shuffleMapping(){
       const indices = Array.from({length: EXAMPLES.length}, (_,i)=>i);
-      // خلط عشوائي بسيط
       for (let i = indices.length - 1; i > 0; i--){
         const j = Math.floor(Math.random() * (i+1));
         [indices[i], indices[j]] = [indices[j], indices[i]];
@@ -444,6 +432,51 @@
       });
     }
 
+    // ————————————————
+    // نص منسوخ ذكي حسب عدد الإجابات
+    // ————————————————
+    function promptText(type, count){
+      // صياغة مطابقة لملاحظتك:
+      // 0: لا يوجد استخراج لاسم (…)
+      // 1: استخرج اسم (…) واحدة
+      // 2: استخرج اسم (…) اثنتان أو صياغة الفئة الخاصة إن رغبت
+      const mapZero = {
+        "دولة":"لا يوجد استخراج لاسم دولة",
+        "فاكهة":"لا يوجد استخراج لاسم فاكهة",
+        "نوع خضار":"لا يوجد استخراج لاسم نوع خضار",
+        "ولد":"لا يوجد استخراج لاسم ولد",
+        "بنت":"لا يوجد استخراج لاسم بنت",
+        "جماد":"لا يوجد استخراج لاسم جماد",
+        "حيوان":"لا يوجد استخراج لاسم حيوان",
+        "عاصمة دولة":"لا يوجد استخراج لاسم عاصمة دولة"
+      };
+      const mapOne = {
+        "دولة":"استخرج اسم دولة واحدة",
+        "فاكهة":"استخرج اسم فاكهة واحدة",
+        "نوع خضار":"استخرج اسم نوع خضار واحد",
+        "ولد":"استخرج اسم ولد واحد",
+        "بنت":"استخرج اسم بنت واحدة",
+        "جماد":"استخرج اسم جماد واحد",
+        "حيوان":"استخرج اسم حيوان واحد",
+        "عاصمة دولة":"استخرج اسم عاصمة دولة"
+      };
+      const mapTwo = {
+        "دولة":"استخرج اسم دولتان",
+        "فاكهة":"استخرج اسم فاكهتان",
+        "نوع خضار":"استخرج اسم نوعين خضار",
+        "ولد":"استخرج اسمي ولدين",
+        "بنت":"استخرج اسمي بنتين",
+        "جماد":"استخرج اسمين جماد",
+        "حيوان":"استخرج اسمين حيوانات",
+        "عاصمة دولة":"استخرج اسم عاصمة دولة"
+      };
+      if (count === 0) return mapZero[type] || `لا يوجد استخراج لاسم ${type}`;
+      if (count === 1) return mapOne[type] || `استخرج اسم ${type} واحدة`;
+      if (count === 2) return mapTwo[type] || `استخرج اسم ${type} اثنتان`;
+      // حالات نادرة (>2)
+      return `استخرج ${count} ${type}`;
+    }
+
     function showExample(cellIndex){
       const exampleIndex = cellToExampleIndex[cellIndex];
       const ex = EXAMPLES[exampleIndex];
@@ -451,17 +484,16 @@
       const lettersBox = document.getElementById("lettersBox");
       const itemsList = document.getElementById("itemsList");
 
-      const lettersLine = "الحروف: \n[ " + ex.letters.join("، ") + " ]";
       lettersBox.innerHTML = `<b>الحروف:</b> [ ${ex.letters.join("، ")} ]`;
-
       itemsList.innerHTML = "";
+
       ex.categories.forEach(cat=>{
-        // لا نعرض "العاصمة" إذا لم توجد إجابة
-        if (cat.title.includes("عاصمة") && cat.answers.length === 0) return;
+        // عرض العناصر في شاشة اللعبة: لا نعرض فئة العاصمة إن كانت بلا إجابة
+        if (cat.key === "capitals" && cat.answers.length === 0) return;
         const item = document.createElement("div");
         item.className = "item";
         const h3 = document.createElement("h3");
-        h3.textContent = cat.title;
+        h3.textContent = promptText(cat.type, cat.answers.length);
         const p = document.createElement("div");
         p.className = "answers";
         p.innerHTML = cat.answers.length ? cat.answers.join(" - ") : `<span class="ok">—</span>`;
@@ -470,7 +502,7 @@
         itemsList.appendChild(item);
       });
 
-      // إعداد النسخ بدون إجابات
+      // زر النسخ (بدون إجابات) مع صياغة دقيقة
       const copyBtn = document.getElementById("copyBtn");
       copyBtn.onclick = ()=>{
         const lines = [];
@@ -480,13 +512,15 @@
         lines.push("الحروف : ");
         lines.push("[ " + ex.letters.join("، ") + " ]");
         ex.categories.forEach(cat=>{
-          if (cat.title.includes("عاصمة") && cat.answers.length === 0) return;
-          lines.push(cat.title);
+          // في النص المنسوخ: نكتب جملة بحسب عدد الإجابات
+          const line = promptText(cat.type, cat.answers.length);
+          // بالنسبة للعاصمة: تُدرج فقط إذا كان count>=1 (كما طلبت: "يطلبها فقط إن وجد")
+          if (cat.key === "capitals" && cat.answers.length === 0) return;
+          lines.push(line);
         });
         lines.push("______________");
         const text = lines.join("\n");
         navigator.clipboard.writeText(text).then(()=>{
-          // اختياري: تأكيد صغير
           copyBtn.textContent = "تم النسخ ✅";
           setTimeout(()=> copyBtn.textContent = "نسخ المثال (بدون إجابات)", 1200);
         }).catch(()=>{
@@ -497,7 +531,6 @@
       document.getElementById("panelTitle").textContent = "المثال المختار";
       panel.classList.remove("hidden");
 
-      // زر إغلاق
       document.getElementById("closeBtn").onclick = ()=>{
         panel.classList.add("hidden");
       };
@@ -506,8 +539,6 @@
     // أزرار الأدوات
     document.getElementById("shuffleBtn").onclick = ()=>{
       shuffleMapping();
-      // لا حاجة لتحديث الواجهة لأن التوزيع يُستخدم عند النقر
-      // لكن يمكن عرض رسالة أو ومضة صغيرة
       document.getElementById("shuffleBtn").textContent = "أُعيد التوزيع ✅";
       setTimeout(()=> document.getElementById("shuffleBtn").textContent = "إعادة التوزيع الآن", 1200);
     };
@@ -516,11 +547,13 @@
     };
 
     // تهيئة الصفحة
-    renderGrid();
-    shuffleMapping();
+    function init(){
+      renderGrid();
+      shuffleMapping();
+    }
+    init();
 
-    // ملاحظة: عند تحديث الصفحة، تُعاد توليد الأمثلة وتوزيعها عشوائيًا، لذا سيتبدّل ارتباط كل مربع بمثال مختلف تلقائيًا.
+    // عند تحديث الصفحة، تُعاد توليد الأمثلة وتوزيعها عشوائيًا تلقائيًا عبر إعادة تحميل الصفحة.
   </script>
 </body>
 </html>
-
